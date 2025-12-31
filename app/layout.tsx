@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Urbanist } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
+import { Providers } from "./providers"
 import "./globals.css"
 
 const urbanist = Urbanist({ subsets: ["latin"], variable: "--font-urbanist" })
@@ -29,7 +30,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${urbanist.variable} font-sans antialiased`}>
-        {children}
+        <Providers>
+          {children}
+        </Providers>
         <Analytics />
       </body>
     </html>
