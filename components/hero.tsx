@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Search, MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
-const words = ["event", "party", "occasion"]
+const words = ["event", "party", "occasion"," B ", " C "]
 
 export function Hero() {
   const [wordIndex, setWordIndex] = useState(0)

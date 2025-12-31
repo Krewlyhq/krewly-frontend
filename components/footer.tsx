@@ -24,9 +24,8 @@ export function Footer() {
               <h3 className="text-xl font-black uppercase tracking-tight text-white">Krewly</h3>
             </div>
             <p className="text-sm text-white/80 max-w-xl leading-relaxed">
-              Krewly is the online destination for beauty & wellness professionals and clients. Professionals can
-              showcase their work, connect with new and existing clients, and build their business. Clients can discover
-              new services and providers, book appointments online, and get inspired.
+              Finding the right vendor shouldn't be a gamble. Krewly helps you discover verified professionals, see real work, and book with confidence
+              while giving vendors a platform to showcase what they do best.
             </p>
 
             <div className="flex flex-wrap gap-4 pt-4">
