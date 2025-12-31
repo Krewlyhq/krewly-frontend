@@ -1,0 +1,6 @@
+<svg width="120" height="40" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="40" rx="6" fill="black"/>
+  <path d="M15 12L25 20L15 28V12Z" fill="white"/>
+  <text x="35" y="18" fill="white" font-family="Arial" font-size="6">GET IT ON</text>
+  <text x="35" y="32" fill="white" font-family="Arial" font-weight="bold" font-size="12">Google Play</text>
+</svg>
