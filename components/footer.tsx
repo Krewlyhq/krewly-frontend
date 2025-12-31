@@ -19,7 +19,10 @@ export function Footer() {
         <div className="grid lg:grid-cols-12 gap-12">
           {/* About Section */}
           <div className="lg:col-span-6 space-y-6">
-            <h3 className="text-sm font-black uppercase tracking-widest text-white">About Krewly</h3>
+            <div className="flex items-center gap-3">
+              <img src="/Group.svg" alt="Krewly" className="h-10 w-10" style={{ filter: 'brightness(0) invert(1)' }} />
+              <h3 className="text-xl font-black uppercase tracking-tight text-white">Krewly</h3>
+            </div>
             <p className="text-sm text-white/80 max-w-xl leading-relaxed">
               Krewly is the online destination for beauty & wellness professionals and clients. Professionals can
               showcase their work, connect with new and existing clients, and build their business. Clients can discover

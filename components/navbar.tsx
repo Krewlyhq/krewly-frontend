@@ -31,7 +31,7 @@ export function Navbar() {
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <img src="/krewly-logo.png" alt="Krewly" className="h-8 w-8 md:h-10 md:w-10" />
+            <img src="/Group.svg" alt="Krewly" className="h-8 w-8 md:h-10 md:w-10" />
             <span className="text-xl md:text-2xl font-black tracking-tighter text-black uppercase leading-none">
               Krewly
             </span>

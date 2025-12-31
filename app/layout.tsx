@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     maximumScale: 1,
   },
   icons: {
-    icon: "/krewly-logo.png",
+    icon: "/Group.svg",
     apple: "/krewly-logo.png",
   },
 }

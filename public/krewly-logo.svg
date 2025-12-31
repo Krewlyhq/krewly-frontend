@@ -1,0 +1,7 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Krewly Logo - uses currentColor for adaptable colors -->
+  <path d="M8 6L16 14L8 22V6Z" fill="currentColor"/>
+  <path d="M16 6L24 14L16 22V6Z" fill="currentColor"/>
+  <path d="M24 18L32 26L24 34V18Z" fill="currentColor"/>
+  <path d="M32 18L40 26L32 34V18Z" fill="currentColor"/>
+</svg>
