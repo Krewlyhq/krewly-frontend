@@ -54,7 +54,7 @@ export function Hero() {
               </span>
             </h1>
             <p className="mb-8 max-w-lg text-sm md:text-base text-gray-600 font-medium mx-auto lg:mx-0">
-              Discover makeup artists, photographers, gele stylists, decorators and more — all in one place.
+              Discover makeup artists, photographers, gele stylists, decorators and more all in one place.
             </p>
 
             {/* Search Bar */}
