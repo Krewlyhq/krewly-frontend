@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Search, MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
-const words = ["event", "party", "occasion"," B ", " C "]
+const words = ["event", "party", "occasion", " B ", " C "]
 
 export function Hero() {
   const [wordIndex, setWordIndex] = useState(0)
@@ -90,6 +90,18 @@ export function Hero() {
               <Button size="sm" className="rounded-full bg-primary px-4 py-1 text-xs font-bold text-white hover:bg-primary/90">
                 Create Your Profile
               </Button>
+            </div>
+
+            {/* Trust signal */}
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 mt-6">
+              <span className="text-xs text-gray-500">Join 300+ vendors in</span>
+              <div className="flex flex-wrap gap-1.5">
+                {["Lagos", "Abuja", "Ibadan", "Port Harcourt"].map((city) => (
+                  <span key={city} className="text-xs font-medium text-gray-600 bg-white/80 px-2 py-0.5 rounded-full border border-gray-200">
+                    {city}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
 
