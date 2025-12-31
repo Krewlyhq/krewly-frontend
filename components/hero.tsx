@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Search, MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
-const words = ["event", "party", "occasion", " B ", " C "]
+const words = ["event", "party", "occasion"]
 
 export function Hero() {
   const [wordIndex, setWordIndex] = useState(0)
@@ -16,6 +16,8 @@ export function Hero() {
 
     const timeout = setTimeout(() => {
       if (!isDeleting) {
+
+        // if(text.length > currentWord.endsWith("A"))
         // Typing
         if (text.length < currentWord.length) {
           setText(currentWord.slice(0, text.length + 1))
