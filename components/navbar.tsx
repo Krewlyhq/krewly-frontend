@@ -30,8 +30,9 @@ export function Navbar() {
           <Menu className="h-6 w-6 cursor-pointer text-black md:hidden" strokeWidth={1.5} />
 
           {/* Logo */}
-          <Link href="/" className="flex items-center">
-            <span className="text-2xl md:text-3xl font-black tracking-tighter text-black uppercase leading-none">
+          <Link href="/" className="flex items-center gap-2">
+            <img src="/krewly-logo.png" alt="Krewly" className="h-8 w-8 md:h-10 md:w-10" />
+            <span className="text-xl md:text-2xl font-black tracking-tighter text-black uppercase leading-none">
               Krewly
             </span>
           </Link>
