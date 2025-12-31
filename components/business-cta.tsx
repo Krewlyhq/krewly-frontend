@@ -24,7 +24,7 @@ export function BusinessCTA() {
           <div className="relative w-full max-w-sm aspect-square">
             <div className="absolute inset-0 bg-white/20 rotate-3 rounded-lg" />
             <div className="absolute inset-4 overflow-hidden rounded-sm rotate-[-2deg] border-4 border-white shadow-xl">
-              <img src="/placeholder.svg" alt="Vendor" className="h-full w-full object-cover" />
+              <img src="/Krewly web photos/IMG_2403.JPG" alt="Vendor" className="h-full w-full object-cover" />
             </div>
           </div>
 

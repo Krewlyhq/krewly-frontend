@@ -1,17 +1,17 @@
 export function ServiceGrid() {
   const categories = [
-    { label: "Makeup Artists", image: "/placeholder.svg" },
-    { label: "Gele Stylists", image: "/placeholder.svg" },
-    { label: "Hair Stylists", image: "/placeholder.svg" },
-    { label: "Photographers", image: "/placeholder.svg" },
-    { label: "Fashion Stylists", image: "/placeholder.svg" },
-    { label: "Event Decorators", image: "/placeholder.svg" },
-    { label: "Tailors", image: "/placeholder.svg" },
-    { label: "Nail Technicians", image: "/placeholder.svg" },
-    { label: "Henna Artists", image: "/placeholder.svg" },
-    { label: "Bridal Stylists", image: "/placeholder.svg" },
-    { label: "MC & Hosts", image: "/placeholder.svg" },
-    { label: "DJ Services", image: "/placeholder.svg" },
+    { label: "Makeup Artists", image: "/Krewly web photos/IMG_2397.JPG" },
+    { label: "Gele Stylists", image: "/Krewly web photos/IMG_2398.JPG" },
+    { label: "Hair Stylists", image: "/Krewly web photos/IMG_2399.JPG" },
+    { label: "Photographers", image: "/Krewly web photos/IMG_2400.JPG" },
+    { label: "Fashion Stylists", image: "/Krewly web photos/IMG_2401.JPG" },
+    { label: "Event Decorators", image: "/Krewly web photos/IMG_2402.JPG" },
+    { label: "Tailors", image: "/Krewly web photos/IMG_2403.JPG" },
+    { label: "Nail Technicians", image: "/Krewly web photos/IMG_2404.JPG" },
+    { label: "Henna Artists", image: "/Krewly web photos/IMG_2405.JPG" },
+    { label: "Bridal Stylists", image: "/Krewly web photos/IMG_2406.JPG" },
+    { label: "MC & Hosts", image: "/Krewly web photos/IMG_2397.JPG" },
+    { label: "DJ Services", image: "/Krewly web photos/IMG_2398.JPG" },
   ]
 
   return (
@@ -24,8 +24,8 @@ export function ServiceGrid() {
               key={i}
               className="flex flex-col overflow-hidden rounded-lg border border-gray-100 shadow-sm transition-transform hover:scale-[1.02] cursor-pointer"
             >
-              <div className="aspect-[4/3] w-full bg-gray-100">
-                <img src={item.image || "/placeholder.svg"} alt={item.label} className="h-full w-full object-cover" />
+              <div className="aspect-[4/3] w-full bg-gray-100 overflow-hidden">
+                <img src={item.image} alt={item.label} className="h-full w-full object-cover" />
               </div>
               <div className="py-3 text-center bg-white">
                 <span className="text-xs md:text-sm font-bold text-gray-900">{item.label}</span>

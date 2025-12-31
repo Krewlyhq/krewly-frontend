@@ -9,7 +9,7 @@ export function ProsNearYou() {
       rating: 4.9,
       count: 48,
       badge: "Top Rated",
-      image: "/placeholder.svg",
+      image: "/Krewly web photos/IMG_2397.JPG",
     },
     {
       name: "Damola Photography",
@@ -18,7 +18,7 @@ export function ProsNearYou() {
       rating: 5.0,
       count: 127,
       badge: "Top Rated",
-      image: "/placeholder.svg",
+      image: "/Krewly web photos/IMG_2400.JPG",
     },
     {
       name: "Iya Gele",
@@ -27,7 +27,7 @@ export function ProsNearYou() {
       rating: 4.8,
       count: 89,
       badge: "",
-      image: "/placeholder.svg",
+      image: "/Krewly web photos/IMG_2398.JPG",
     },
     {
       name: "Adunni Decor",
@@ -36,7 +36,7 @@ export function ProsNearYou() {
       rating: 5.0,
       count: 34,
       badge: "Top Rated",
-      image: "/placeholder.svg",
+      image: "/Krewly web photos/IMG_2402.JPG",
     },
   ]
 
@@ -49,29 +49,34 @@ export function ProsNearYou() {
             See All <ChevronRight className="h-4 w-4" />
           </button>
         </div>
-        <div className="flex gap-4 overflow-x-auto pb-6 no-scrollbar">
+
+        {/* Grid layout matching service-grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {vendors.map((vendor, i) => (
-            <div key={i} className="flex-none w-[240px] md:w-[280px] cursor-pointer">
-              <div className="relative aspect-[3/4] rounded-xl overflow-hidden mb-3 group">
-                <img
-                  src={vendor.image || "/placeholder.svg"}
-                  alt={vendor.name}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
+            <div
+              key={i}
+              className="flex flex-col overflow-hidden rounded-lg border border-gray-100 shadow-sm transition-transform hover:scale-[1.02] cursor-pointer bg-white"
+            >
+              {/* Image */}
+              <div className="relative aspect-[4/3] w-full overflow-hidden bg-gray-100">
+                <img src={vendor.image} alt={vendor.name} className="h-full w-full object-cover" />
                 {vendor.badge && (
-                  <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-1.5 border border-gray-100 shadow-sm">
-                    <Star className="h-3 w-3 fill-[#FFD700] text-[#FFD700]" />
-                    <span className="text-[10px] font-bold uppercase tracking-wide">{vendor.badge}</span>
-                  </div>
+                  <span className="absolute left-2 top-2 rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold text-white">
+                    {vendor.badge}
+                  </span>
                 )}
               </div>
-              <h3 className="font-bold text-lg text-gray-900 leading-tight">{vendor.name}</h3>
-              <p className="text-sm text-primary font-medium mt-0.5">{vendor.category}</p>
-              <p className="text-sm text-gray-500">{vendor.loc}</p>
-              <div className="flex items-center gap-1 mt-1.5">
-                <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                <span className="text-xs font-bold">{vendor.rating.toFixed(1)}</span>
-                <span className="text-xs text-gray-400">({vendor.count} inquiries)</span>
+
+              {/* Info */}
+              <div className="p-3">
+                <h3 className="font-bold text-sm text-gray-900 truncate">{vendor.name}</h3>
+                <p className="text-xs text-primary font-medium">{vendor.category}</p>
+                <p className="text-xs text-gray-500">{vendor.loc}</p>
+                <div className="flex items-center gap-1 mt-1">
+                  <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                  <span className="text-xs font-bold">{vendor.rating.toFixed(1)}</span>
+                  <span className="text-[10px] text-gray-400">({vendor.count})</span>
+                </div>
               </div>
             </div>
           ))}

@@ -7,27 +7,27 @@ export function LocationsSection() {
   const [showAll, setShowAll] = useState(false)
 
   const states = [
-    { name: "Lagos", image: "/placeholder.svg" },
-    { name: "Abuja (FCT)", image: "/placeholder.svg" },
-    { name: "Oyo", image: "/placeholder.svg" },
-    { name: "Rivers", image: "/placeholder.svg" },
-    { name: "Kano", image: "/placeholder.svg" },
-    { name: "Ogun", image: "/placeholder.svg" },
-    { name: "Kaduna", image: "/placeholder.svg" },
-    { name: "Enugu", image: "/placeholder.svg" },
-    { name: "Delta", image: "/placeholder.svg" },
-    { name: "Anambra", image: "/placeholder.svg" },
-    { name: "Edo", image: "/placeholder.svg" },
-    { name: "Imo", image: "/placeholder.svg" },
+    { name: "Lagos", image: "/Krewly web photos/IMG_2397.JPG" },
+    { name: "Abuja (FCT)", image: "/Krewly web photos/IMG_2398.JPG" },
+    { name: "Oyo", image: "/Krewly web photos/IMG_2399.JPG" },
+    { name: "Rivers", image: "/Krewly web photos/IMG_2400.JPG" },
+    { name: "Kano", image: "/Krewly web photos/IMG_2401.JPG" },
+    { name: "Ogun", image: "/Krewly web photos/IMG_2402.JPG" },
+    { name: "Kaduna", image: "/Krewly web photos/IMG_2403.JPG" },
+    { name: "Enugu", image: "/Krewly web photos/IMG_2404.JPG" },
+    { name: "Delta", image: "/Krewly web photos/IMG_2405.JPG" },
+    { name: "Anambra", image: "/Krewly web photos/IMG_2406.JPG" },
+    { name: "Edo", image: "/Krewly web photos/IMG_2397.JPG" },
+    { name: "Imo", image: "/Krewly web photos/IMG_2398.JPG" },
     // Hidden initially - shown on "See more"
-    { name: "Akwa Ibom", image: "/placeholder.svg" },
-    { name: "Cross River", image: "/placeholder.svg" },
-    { name: "Osun", image: "/placeholder.svg" },
-    { name: "Ekiti", image: "/placeholder.svg" },
-    { name: "Kwara", image: "/placeholder.svg" },
-    { name: "Ondo", image: "/placeholder.svg" },
-    { name: "Abia", image: "/placeholder.svg" },
-    { name: "Bayelsa", image: "/placeholder.svg" },
+    { name: "Akwa Ibom", image: "/Krewly web photos/IMG_2399.JPG" },
+    { name: "Cross River", image: "/Krewly web photos/IMG_2400.JPG" },
+    { name: "Osun", image: "/Krewly web photos/IMG_2401.JPG" },
+    { name: "Ekiti", image: "/Krewly web photos/IMG_2402.JPG" },
+    { name: "Kwara", image: "/Krewly web photos/IMG_2403.JPG" },
+    { name: "Ondo", image: "/Krewly web photos/IMG_2404.JPG" },
+    { name: "Abia", image: "/Krewly web photos/IMG_2405.JPG" },
+    { name: "Bayelsa", image: "/Krewly web photos/IMG_2406.JPG" },
     { name: "Benue", image: "/placeholder.svg" },
     { name: "Borno", image: "/placeholder.svg" },
     { name: "Ebonyi", image: "/placeholder.svg" },
@@ -62,7 +62,7 @@ export function LocationsSection() {
               key={i}
               className="flex flex-col overflow-hidden rounded-lg border border-gray-100 shadow-sm transition-transform hover:scale-[1.02] cursor-pointer"
             >
-              <div className="aspect-[4/3] w-full bg-gray-100">
+              <div className="aspect-[4/3] w-full bg-gray-100 overflow-hidden">
                 <img src={state.image || "/placeholder.svg"} alt={state.name} className="h-full w-full object-cover" />
               </div>
               <div className="py-3 text-center bg-white">
@@ -82,7 +82,7 @@ export function LocationsSection() {
               key={i + 12}
               className="flex flex-col overflow-hidden rounded-lg border border-gray-100 shadow-sm transition-transform hover:scale-[1.02] cursor-pointer"
             >
-              <div className="aspect-[4/3] w-full bg-gray-100">
+              <div className="aspect-[4/3] w-full bg-gray-100 overflow-hidden">
                 <img src={state.image || "/placeholder.svg"} alt={state.name} className="h-full w-full object-cover" />
               </div>
               <div className="py-3 text-center bg-white">
