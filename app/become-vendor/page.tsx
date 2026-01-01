@@ -3,10 +3,11 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft, Phone, Building2, MapPin, Camera, Share2, Check } from "lucide-react"
+import { ArrowLeft, Phone, Building2, MapPin, Camera, Share2, Check, ArrowRight, ChevronRight, ChevronLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/lib/auth"
 import { CategoryPicker, LocationPicker, ImageUploader, SocialInputs } from "@/components/vendor"
+import { Switch } from "@/components/ui/switch"
 import {
     type VendorCategory,
     type SocialHandles,
@@ -14,6 +15,7 @@ import {
     saveApplication,
     getApplication,
 } from "@/lib/vendor"
+import confetti from "canvas-confetti"
 
 // Phone validation regex: 0xxxxxxxxxx (11 digits) or +234xxxxxxxxx
 const PHONE_REGEX = /^(0[7-9][0-1]\d{8}|\+234[7-9][0-1]\d{8})$/
@@ -28,6 +30,8 @@ interface FormErrors {
     instagram?: string
 }
 
+const STEPS = ['Business', 'Location', 'Portfolio', 'Contact']
+
 export default function BecomeVendorPage() {
     const router = useRouter()
     const { user, isLoading: authLoading, isAuthenticated } = useAuth()
@@ -35,6 +39,12 @@ export default function BecomeVendorPage() {
     // Check for existing application
     const [existingApplication, setExistingApplication] = useState<VendorApplication | null>(null)
     const [checkingApplication, setCheckingApplication] = useState(true)
+
+    // UI state
+    const [currentStep, setCurrentStep] = useState(0)
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [isSuccess, setIsSuccess] = useState(false)
+    const [errors, setErrors] = useState<FormErrors>({})
 
     // Form state
     const [businessName, setBusinessName] = useState("")
@@ -46,11 +56,6 @@ export default function BecomeVendorPage() {
     const [images, setImages] = useState<string[]>([])
     const [socialHandles, setSocialHandles] = useState<SocialHandles>({ instagram: "" })
 
-    // UI state
-    const [errors, setErrors] = useState<FormErrors>({})
-    const [isSubmitting, setIsSubmitting] = useState(false)
-    const [isSuccess, setIsSuccess] = useState(false)
-
     // Check authentication and existing application
     useEffect(() => {
         if (!authLoading) {
@@ -58,14 +63,10 @@ export default function BecomeVendorPage() {
                 router.push("/")
                 return
             }
-
-            // Check if user is already a vendor
             if (user?.role === 'vendor') {
                 router.push("/dashboard")
                 return
             }
-
-            // Check for existing application
             const app = getApplication()
             if (app) {
                 setExistingApplication(app)
@@ -74,54 +75,96 @@ export default function BecomeVendorPage() {
         }
     }, [authLoading, isAuthenticated, user, router])
 
-    const validate = (): boolean => {
-        const newErrors: FormErrors = {}
+    const validateStep = (stepIndex: number): boolean => {
+        const newErrors: FormErrors = { ...errors } // Keep existing errors? Maybe clear relevant ones.
+        // Actually better to clear errors for current step logic
 
-        if (!businessName.trim() || businessName.length < 2) {
-            newErrors.businessName = "Business name is required (min 2 characters)"
-        }
+        let isValid = true
 
-        if (categories.length === 0) {
-            newErrors.categories = "Select at least one category"
-        }
+        switch (stepIndex) {
+            case 0: // Business
+                if (!businessName.trim() || businessName.length < 2) {
+                    newErrors.businessName = "Business name is required (min 2 characters)"
+                    isValid = false
+                } else {
+                    delete newErrors.businessName
+                }
 
-        if (!state) {
-            newErrors.state = "State is required"
-        }
+                if (categories.length === 0) {
+                    newErrors.categories = "Select at least one category"
+                    isValid = false
+                } else {
+                    delete newErrors.categories
+                }
+                break
 
-        if (!city) {
-            newErrors.city = "City/LGA is required"
-        }
+            case 1: // Location
+                if (!state) {
+                    newErrors.state = "State is required"
+                    isValid = false
+                } else {
+                    delete newErrors.state
+                }
 
-        if (!phone.trim()) {
-            newErrors.phone = "Phone number is required"
-        } else if (!PHONE_REGEX.test(phone.replace(/\s/g, ''))) {
-            newErrors.phone = "Enter a valid Nigerian phone number (e.g., 08012345678 or +2348012345678)"
-        }
+                if (!city) {
+                    newErrors.city = "City/LGA is required"
+                    isValid = false
+                } else {
+                    delete newErrors.city
+                }
+                break
 
-        if (images.length < 2) {
-            newErrors.images = "Upload at least 2 portfolio images"
-        }
+            case 2: // Portfolio
+                if (images.length < 2) {
+                    newErrors.images = "Upload at least 2 portfolio images"
+                    isValid = false
+                } else {
+                    delete newErrors.images
+                }
+                break
 
-        if (!socialHandles.instagram.trim()) {
-            newErrors.instagram = "Instagram handle is required"
+            case 3: // Contact
+                if (!phone.trim()) {
+                    newErrors.phone = "Phone number is required"
+                    isValid = false
+                } else if (!PHONE_REGEX.test(phone.replace(/\s/g, ''))) {
+                    newErrors.phone = "Enter a valid Nigerian phone number"
+                    isValid = false
+                } else {
+                    delete newErrors.phone
+                }
+
+                if (!socialHandles.instagram.trim()) {
+                    newErrors.instagram = "Instagram handle is required"
+                    isValid = false
+                } else {
+                    delete newErrors.instagram
+                }
+                break
         }
 
         setErrors(newErrors)
-        return Object.keys(newErrors).length === 0
+        return isValid
     }
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
+    const handleNext = () => {
+        if (validateStep(currentStep)) {
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+            setCurrentStep(prev => Math.min(prev + 1, STEPS.length - 1))
+        }
+    }
 
-        if (!validate()) return
+    const handleBack = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        setCurrentStep(prev => Math.max(prev - 1, 0))
+    }
+
+    const handleSubmit = async () => {
+        if (!validateStep(3)) return // Validate final step
 
         setIsSubmitting(true)
-
-        // Simulate API delay
         await new Promise(resolve => setTimeout(resolve, 1000))
 
-        // Create application
         const application: VendorApplication = {
             id: `app-${Date.now()}`,
             userId: user?.id || '',
@@ -140,9 +183,36 @@ export default function BecomeVendorPage() {
         saveApplication(application)
         setIsSuccess(true)
         setIsSubmitting(false)
+
+        // Trigger confetti
+        const duration = 5 * 1000
+        const animationEnd = Date.now() + duration
+        const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 }
+
+        const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min
+
+        const interval: any = setInterval(function () {
+            const timeLeft = animationEnd - Date.now()
+
+            if (timeLeft <= 0) {
+                return clearInterval(interval)
+            }
+
+            const particleCount = 50 * (timeLeft / duration)
+            confetti({
+                ...defaults,
+                particleCount,
+                origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+            })
+            confetti({
+                ...defaults,
+                particleCount,
+                origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+            })
+        }, 250)
     }
 
-    // Loading state
+    // Loading & Success states
     if (authLoading || checkingApplication) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-[var(--frozen-lake-50)]">
@@ -151,7 +221,6 @@ export default function BecomeVendorPage() {
         )
     }
 
-    // Success state
     if (isSuccess) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-[var(--frozen-lake-50)] px-4">
@@ -164,7 +233,7 @@ export default function BecomeVendorPage() {
                         We'll review your application within 24 hours. You'll be notified once it's approved.
                     </p>
                     <Link href="/dashboard">
-                        <Button className="w-full py-3 bg-primary hover:bg-primary/90 text-white font-bold">
+                        <Button className="w-full py-3 bg-primary hover:bg-primary/90 text-white font-bold rounded-full">
                             Go to Dashboard
                         </Button>
                     </Link>
@@ -173,7 +242,7 @@ export default function BecomeVendorPage() {
         )
     }
 
-    // Existing application state
+    // Existing Application View (Read Only)
     if (existingApplication) {
         return (
             <div className="min-h-screen bg-[var(--frozen-lake-50)] px-4 py-8">
@@ -185,7 +254,6 @@ export default function BecomeVendorPage() {
 
                     <div className="bg-white rounded-2xl shadow-xl p-8">
                         <div className="text-center mb-6">
-                            <img src="/Group.svg" alt="Krewly" className="h-12 w-12 mx-auto mb-4" />
                             <h1 className="text-2xl font-bold mb-2">Application {existingApplication.status === 'pending' ? 'Pending' : existingApplication.status === 'approved' ? 'Approved' : 'Rejected'}</h1>
                             {existingApplication.status === 'pending' && (
                                 <p className="text-gray-500">
@@ -255,7 +323,7 @@ export default function BecomeVendorPage() {
         )
     }
 
-    // Form
+    // Main Wizard Form
     return (
         <div className="min-h-screen bg-[var(--frozen-lake-50)] px-4 py-8">
             <div className="max-w-2xl mx-auto">
@@ -264,28 +332,8 @@ export default function BecomeVendorPage() {
                     Back to Home
                 </Link>
 
-                <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8">
-                    {/* Progress Steps */}
-                    <div className="flex items-center justify-between mb-8 px-2 md:px-8">
-                        {['Business', 'Location', 'Portfolio', 'Contact'].map((step, i, arr) => (
-                            <div key={step} className="flex flex-col items-center relative z-10">
-                                <div className={`
-                                    w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold mb-1 transition-all
-                                    bg-primary text-white border-primary
-                                `}>
-                                    {i + 1}
-                                </div>
-                                <span className="text-[10px] uppercase font-bold text-primary">{step}</span>
-
-                                {/* Connector Line */}
-                                {i < arr.length - 1 && (
-                                    <div className="absolute top-4 left-1/2 w-[calc(100vw/5)] md:w-32 h-[2px] -z-10 bg-primary/20" />
-                                )}
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Header */}
+                <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 min-h-[600px] flex flex-col">
+                    {/* Header Text */}
                     <div className="text-center mb-8">
                         <h1 className="text-2xl font-bold mb-2">Become a Vendor</h1>
                         <p className="text-gray-500">
@@ -293,16 +341,35 @@ export default function BecomeVendorPage() {
                         </p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-8">
-                        {/* Business Information */}
-                        <section>
-                            <div className="flex items-center gap-2 mb-4">
-                                <Building2 className="h-5 w-5 text-primary" />
-                                <h2 className="font-bold text-gray-900">Business Information</h2>
-                            </div>
+                    {/* Progress Steps */}
+                    <div className="flex items-center justify-between mb-8 px-2 md:px-8">
+                        {STEPS.map((step, i) => (
+                            <div key={step} className="flex flex-col items-center relative z-10 transition-colors duration-300">
+                                <div className={`
+                                    w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold mb-1 transition-all duration-300
+                                    ${i <= currentStep ? 'bg-primary text-white scale-110' : 'bg-gray-100 text-gray-400'}
+                                `}>
+                                    {i + 1}
+                                </div>
+                                <span className={`text-[10px] uppercase font-bold transition-colors duration-300 ${i <= currentStep ? 'text-primary' : 'text-gray-300'}`}>{step}</span>
 
-                            <div className="space-y-5">
-                                {/* Business Name */}
+                                {/* Connector Line */}
+                                {i < STEPS.length - 1 && (
+                                    <div className={`absolute top-4 left-1/2 w-[calc(100vw/5)] md:w-32 h-[2px] -z-10 transition-colors duration-300 ${i < currentStep ? 'bg-primary' : 'bg-gray-100'}`} />
+                                )}
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Step Content */}
+                    <div className="flex-1">
+                        {currentStep === 0 && (
+                            <div className="animate-in fade-in slide-in-from-right-4 duration-300 space-y-6">
+                                <div className="flex items-center gap-2 mb-4">
+                                    <Building2 className="h-5 w-5 text-primary" />
+                                    <h2 className="font-bold text-xl text-gray-900">Business Information</h2>
+                                </div>
+
                                 <div className="space-y-1.5">
                                     <label className="block text-sm font-medium text-gray-700">
                                         Business Name <span className="text-red-500">*</span>
@@ -313,27 +380,26 @@ export default function BecomeVendorPage() {
                                         onChange={(e) => setBusinessName(e.target.value)}
                                         placeholder="e.g., Glam by Tolu"
                                         className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all ${errors.businessName ? 'border-red-300' : 'border-gray-200'}`}
+                                        autoFocus
                                     />
                                     {errors.businessName && <p className="text-xs text-red-500">{errors.businessName}</p>}
                                 </div>
 
-                                {/* Categories */}
                                 <CategoryPicker
                                     selected={categories}
                                     onChange={setCategories}
                                     error={errors.categories}
                                 />
                             </div>
-                        </section>
+                        )}
 
-                        {/* Location */}
-                        <section>
-                            <div className="flex items-center gap-2 mb-4">
-                                <MapPin className="h-5 w-5 text-primary" />
-                                <h2 className="font-bold text-gray-900">Location</h2>
-                            </div>
+                        {currentStep === 1 && (
+                            <div className="animate-in fade-in slide-in-from-right-4 duration-300 space-y-6">
+                                <div className="flex items-center gap-2 mb-4">
+                                    <MapPin className="h-5 w-5 text-primary" />
+                                    <h2 className="font-bold text-xl text-gray-900">Location</h2>
+                                </div>
 
-                            <div className="space-y-5">
                                 <LocationPicker
                                     state={state}
                                     city={city}
@@ -343,46 +409,56 @@ export default function BecomeVendorPage() {
                                     cityError={errors.city}
                                 />
 
-                                {/* Available for Travel */}
-                                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                                {/* Rebuilt Travel Switch */}
+                                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100">
                                     <div>
                                         <p className="font-medium text-gray-900">Available for travel</p>
-                                        <p className="text-xs text-gray-500">Can you travel to other cities for bookings?</p>
+                                        <p className="text-xs text-gray-500 mt-0.5">Can you travel to other cities for bookings?</p>
                                     </div>
                                     <button
                                         type="button"
                                         onClick={() => setAvailableForTravel(!availableForTravel)}
-                                        className={`relative w-12 h-6 rounded-full transition-colors flex-shrink-0 ${availableForTravel ? 'bg-primary' : 'bg-gray-300'}`}
+                                        className={`
+                                            relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2
+                                            ${availableForTravel ? 'bg-primary' : 'bg-gray-200'}
+                                        `}
                                     >
-                                        <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${availableForTravel ? 'translate-x-6' : 'translate-x-0.5'}`} />
+                                        <span className="sr-only">Use setting</span>
+                                        <span
+                                            aria-hidden="true"
+                                            className={`
+                                                pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out
+                                                ${availableForTravel ? 'translate-x-5' : 'translate-x-0'}
+                                            `}
+                                        />
                                     </button>
                                 </div>
                             </div>
-                        </section>
+                        )}
 
-                        {/* Portfolio */}
-                        <section>
-                            <div className="flex items-center gap-2 mb-4">
-                                <Camera className="h-5 w-5 text-primary" />
-                                <h2 className="font-bold text-gray-900">Portfolio</h2>
+                        {currentStep === 2 && (
+                            <div className="animate-in fade-in slide-in-from-right-4 duration-300 space-y-6">
+                                <div className="flex items-center gap-2 mb-4">
+                                    <Camera className="h-5 w-5 text-primary" />
+                                    <h2 className="font-bold text-xl text-gray-900">Portfolio</h2>
+                                </div>
+                                <p className="text-sm text-gray-500 mb-6">Upload your best work to show clients what you can do.</p>
+
+                                <ImageUploader
+                                    images={images}
+                                    onChange={setImages}
+                                    error={errors.images}
+                                />
                             </div>
+                        )}
 
-                            <ImageUploader
-                                images={images}
-                                onChange={setImages}
-                                error={errors.images}
-                            />
-                        </section>
+                        {currentStep === 3 && (
+                            <div className="animate-in fade-in slide-in-from-right-4 duration-300 space-y-6">
+                                <div className="flex items-center gap-2 mb-4">
+                                    <Share2 className="h-5 w-5 text-primary" />
+                                    <h2 className="font-bold text-xl text-gray-900">Contact & Social</h2>
+                                </div>
 
-                        {/* Contact & Social */}
-                        <section>
-                            <div className="flex items-center gap-2 mb-4">
-                                <Share2 className="h-5 w-5 text-primary" />
-                                <h2 className="font-bold text-gray-900">Contact & Social</h2>
-                            </div>
-
-                            <div className="space-y-5">
-                                {/* Phone */}
                                 <div className="space-y-1.5">
                                     <label className="block text-sm font-medium text-gray-700">
                                         Phone Number <span className="text-red-500">*</span>
@@ -400,24 +476,52 @@ export default function BecomeVendorPage() {
                                     {errors.phone && <p className="text-xs text-red-500">{errors.phone}</p>}
                                 </div>
 
-                                {/* Social Handles */}
                                 <SocialInputs
                                     handles={socialHandles}
                                     onChange={setSocialHandles}
                                     instagramError={errors.instagram}
                                 />
                             </div>
-                        </section>
+                        )}
+                    </div>
 
-                        {/* Submit */}
+                    {/* Navigation Buttons */}
+                    <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-100">
                         <Button
-                            type="submit"
-                            disabled={isSubmitting}
-                            className="w-full py-4 bg-primary hover:bg-primary/90 text-white font-bold text-base"
+                            variant="ghost"
+                            onClick={handleBack}
+                            disabled={currentStep === 0 || isSubmitting}
+                            className={`text-gray-500 hover:text-gray-900 ${currentStep === 0 ? 'invisible' : ''}`}
                         >
-                            {isSubmitting ? "Submitting..." : "Submit Application"}
+                            <ChevronLeft className="h-4 w-4 mr-1" />
+                            Back
                         </Button>
-                    </form>
+
+                        {currentStep === STEPS.length - 1 ? (
+                            <Button
+                                onClick={handleSubmit}
+                                disabled={isSubmitting}
+                                className="bg-primary hover:bg-primary/90 text-white font-bold px-8 rounded-full"
+                            >
+                                {isSubmitting ? (
+                                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                ) : (
+                                    <>
+                                        Submit Application
+                                        <Check className="ml-2 h-4 w-4" />
+                                    </>
+                                )}
+                            </Button>
+                        ) : (
+                            <Button
+                                onClick={handleNext}
+                                className="bg-black hover:bg-gray-800 text-white font-bold px-8 rounded-full"
+                            >
+                                Next Step
+                                <ChevronRight className="ml-2 h-4 w-4" />
+                            </Button>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
