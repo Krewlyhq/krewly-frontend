@@ -20,6 +20,8 @@ export function ProsNearYou() {
       badge: "Top Rated",
       image: "/Krewly web photos/IMG_2400.JPG",
     },
+
+    
     {
       name: "Iya Gele",
       category: "Gele Stylist",

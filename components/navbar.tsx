@@ -42,7 +42,7 @@ export function Navbar() {
         {/* Right section: Auth actions */}
         <div className="flex flex-1 items-center justify-end gap-2 md:gap-4">
           <Link
-            href="/vendor/signup"
+            href="/become-vendor"
             className="hidden lg:block text-sm font-medium text-gray-600 hover:text-black transition-colors"
           >
             Are you a vendor?

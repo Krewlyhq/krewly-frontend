@@ -1,15 +1,29 @@
 "use client"
 
 /**
- * Auth Module - Context Provider
+ * Auth Module - Context Provider (MOCKED)
  * 
- * React context for authentication state management
+ * Mock authentication for frontend development
  */
 
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
-import type { User, AuthResponse, SignupData, LoginData } from './types';
-import * as authApi from './api';
+import type { User, SignupData, LoginData } from './types';
 import * as storage from './storage';
+
+// Mock user data
+const MOCK_USER: User = {
+    id: 'mock-user-123',
+    email: 'demo@krewly.com',
+    firstName: 'Demo',
+    lastName: 'User',
+    avatarUrl: null,
+    phone: null,
+    role: 'client',
+    status: 'active',
+    emailVerified: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+};
 
 interface AuthContextType {
     user: User | null;
@@ -27,93 +41,66 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
-    const handleAuthResponse = useCallback((response: AuthResponse) => {
-        const { user, tokens } = response;
-        storage.saveTokens(tokens.accessToken, tokens.refreshToken, tokens.expiresIn);
-        storage.saveUser(user);
-        setUser(user);
+    // Mock login - accepts any credentials
+    const login = useCallback(async (data: LoginData) => {
+        // Simulate API delay
+        await new Promise(resolve => setTimeout(resolve, 800));
+
+        const mockUser: User = {
+            ...MOCK_USER,
+            email: data.email,
+        };
+
+        storage.saveTokens('mock-access-token', 'mock-refresh-token', 3600);
+        storage.saveUser(mockUser);
+        setUser(mockUser);
     }, []);
 
-    const refreshAuth = useCallback(async () => {
-        const tokens = storage.getTokens();
-        if (!tokens?.refreshToken) {
-            storage.clearAuth();
-            setUser(null);
-            return;
-        }
-
-        try {
-            const response = await authApi.refreshToken(tokens.refreshToken);
-            handleAuthResponse(response);
-        } catch {
-            storage.clearAuth();
-            setUser(null);
-        }
-    }, [handleAuthResponse]);
-
-    const login = useCallback(async (data: LoginData) => {
-        const response = await authApi.login(data);
-        handleAuthResponse(response);
-    }, [handleAuthResponse]);
-
+    // Mock signup - accepts any data
     const signup = useCallback(async (data: SignupData) => {
-        const response = await authApi.signup(data);
-        handleAuthResponse(response);
-    }, [handleAuthResponse]);
+        // Simulate API delay
+        await new Promise(resolve => setTimeout(resolve, 800));
 
+        const mockUser: User = {
+            ...MOCK_USER,
+            email: data.email,
+            firstName: data.firstName || null,
+            lastName: data.lastName || null,
+            emailVerified: false, // New users start unverified
+        };
+
+        storage.saveTokens('mock-access-token', 'mock-refresh-token', 3600);
+        storage.saveUser(mockUser);
+        setUser(mockUser);
+    }, []);
+
+    // Mock logout
     const logout = useCallback(async () => {
-        const tokens = storage.getTokens();
-        if (tokens?.refreshToken) {
-            try {
-                await authApi.logout(tokens.refreshToken);
-            } catch {
-                // Ignore logout errors
-            }
-        }
+        await new Promise(resolve => setTimeout(resolve, 300));
         storage.clearAuth();
         setUser(null);
+    }, []);
+
+    // Mock refresh - just restore from storage
+    const refreshAuth = useCallback(async () => {
+        const storedUser = storage.getStoredUser<User>();
+        if (storedUser) {
+            setUser(storedUser);
+        }
     }, []);
 
     // Initialize auth state on mount
     useEffect(() => {
         const initAuth = async () => {
-            const tokens = storage.getTokens();
             const storedUser = storage.getStoredUser<User>();
-
-            if (!tokens) {
-                setIsLoading(false);
-                return;
-            }
-
-            // Check if token is expired
-            if (storage.isTokenExpired()) {
-                await refreshAuth();
-            } else if (storedUser) {
+            if (storedUser) {
                 setUser(storedUser);
             }
-
             setIsLoading(false);
         };
 
         initAuth();
-    }, [refreshAuth]);
-
-    // Auto-refresh token before expiry
-    useEffect(() => {
-        if (!user) return;
-
-        const tokens = storage.getTokens();
-        if (!tokens) return;
-
-        const timeUntilExpiry = tokens.expiresAt - Date.now() - 60000; // 1 minute before expiry
-        if (timeUntilExpiry <= 0) return;
-
-        const timer = setTimeout(() => {
-            refreshAuth();
-        }, timeUntilExpiry);
-
-        return () => clearTimeout(timer);
-    }, [user, refreshAuth]);
+    }, []);
 
     return (
         <AuthContext.Provider
