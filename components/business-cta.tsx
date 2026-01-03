@@ -1,6 +1,12 @@
+"use client"
+
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { useAuth } from "@/lib/auth"
 
 export function BusinessCTA() {
+  const { isAuthenticated } = useAuth()
+
   const cards = [
     {
       title: "Showcase your work",
@@ -15,6 +21,9 @@ export function BusinessCTA() {
       desc: "Let clients contact you directly via WhatsApp, phone, or our simple inquiry form.",
     },
   ]
+
+  // Link destination based on auth state
+  const ctaHref = isAuthenticated ? "/become-vendor" : "/?login=true"
 
   return (
     <section className="py-16 bg-[var(--frozen-lake-100)] overflow-hidden">
@@ -34,9 +43,11 @@ export function BusinessCTA() {
             <p className="text-lg md:text-xl text-black/80 mb-8 font-medium">
               Join hundreds of vendors getting discovered by clients for events and bookings.
             </p>
-            <Button className="bg-primary hover:bg-primary/90 text-white font-bold px-8 py-6 text-lg rounded-full">
-              Create Your Profile
-            </Button>
+            <Link href={ctaHref}>
+              <Button className="bg-primary hover:bg-primary/90 text-white font-bold px-8 py-6 text-lg rounded-full">
+                Create Your Profile
+              </Button>
+            </Link>
           </div>
         </div>
 
@@ -46,9 +57,11 @@ export function BusinessCTA() {
             <div key={i} className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
               <h3 className="text-xl font-bold mb-3">{card.title}</h3>
               <p className="text-gray-600 mb-6 leading-relaxed">{card.desc}</p>
-              <Button variant="outline" className="bg-primary text-white hover:bg-primary/90 border-none font-bold">
-                Learn More
-              </Button>
+              <Link href={ctaHref}>
+                <Button variant="outline" className="bg-primary text-white hover:bg-primary/90 border-none font-bold">
+                  Learn More
+                </Button>
+              </Link>
             </div>
           ))}
         </div>

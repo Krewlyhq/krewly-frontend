@@ -225,6 +225,48 @@ export default function DashboardPage() {
                                     </Button>
                                 </Link>
                             )}
+                            {user.role === 'admin' && (
+                                <Link href="/admin">
+                                    <Button className="rounded-full bg-gray-900 text-white">
+                                        Admin Panel
+                                    </Button>
+                                </Link>
+                            )}
+                        </div>
+
+                        {/* Dev Tools */}
+                        <div className="mt-6 pt-4 border-t border-gray-100">
+                            <p className="text-xs text-gray-400 mb-2">Developer Tools</p>
+                            <div className="flex flex-wrap gap-2">
+                                <button
+                                    onClick={() => {
+                                        const storedUser = localStorage.getItem('krewly_user');
+                                        if (storedUser) {
+                                            const u = JSON.parse(storedUser);
+                                            u.role = u.role === 'admin' ? 'client' : 'admin';
+                                            localStorage.setItem('krewly_user', JSON.stringify(u));
+                                            window.location.reload();
+                                        }
+                                    }}
+                                    className="text-xs px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full transition-colors"
+                                >
+                                    [DEV] Switch to {user.role === 'admin' ? 'Customer' : 'Admin'}
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        const storedUser = localStorage.getItem('krewly_user');
+                                        if (storedUser) {
+                                            const u = JSON.parse(storedUser);
+                                            u.role = 'vendor';
+                                            localStorage.setItem('krewly_user', JSON.stringify(u));
+                                            window.location.reload();
+                                        }
+                                    }}
+                                    className="text-xs px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full transition-colors"
+                                >
+                                    [DEV] Switch to Vendor
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

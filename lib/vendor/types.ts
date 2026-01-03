@@ -36,4 +36,5 @@ export interface VendorApplication {
     status: VendorApplicationStatus;
     submittedAt: string;
     reviewedAt?: string;
+    rejectionReason?: string;
 }

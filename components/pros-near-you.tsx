@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { Star, ChevronRight } from "lucide-react"
 
 export function ProsNearYou() {
@@ -20,8 +21,6 @@ export function ProsNearYou() {
       badge: "Top Rated",
       image: "/Krewly web photos/IMG_2400.JPG",
     },
-
-    
     {
       name: "Iya Gele",
       category: "Gele Stylist",
@@ -47,9 +46,9 @@ export function ProsNearYou() {
       <div className="container mx-auto px-4 md:px-8">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-xl md:text-2xl font-bold">Featured Vendors</h2>
-          <button className="flex items-center gap-1 text-sm font-bold text-gray-500 hover:text-black transition-colors">
+          <Link href="/vendors" className="flex items-center gap-1 text-sm font-bold text-gray-500 hover:text-black transition-colors">
             See All <ChevronRight className="h-4 w-4" />
-          </button>
+          </Link>
         </div>
 
         {/* Grid layout matching service-grid */}

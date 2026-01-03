@@ -1,53 +1,53 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { ChevronDown, ChevronUp } from "lucide-react"
 
 export function LocationsSection() {
   const [showAll, setShowAll] = useState(false)
 
   const states = [
-    { name: "Lagos", image: "/Krewly web photos/IMG_2397.JPG" },
-    { name: "Abuja (FCT)", image: "/Krewly web photos/IMG_2398.JPG" },
-    { name: "Oyo", image: "/Krewly web photos/IMG_2399.JPG" },
-    { name: "Rivers", image: "/Krewly web photos/IMG_2400.JPG" },
-    { name: "Kano", image: "/Krewly web photos/IMG_2401.JPG" },
-    { name: "Ogun", image: "/Krewly web photos/IMG_2402.JPG" },
-    { name: "Kaduna", image: "/Krewly web photos/IMG_2403.JPG" },
-    { name: "Enugu", image: "/Krewly web photos/IMG_2404.JPG" },
-    { name: "Delta", image: "/Krewly web photos/IMG_2405.JPG" },
-    { name: "Anambra", image: "/Krewly web photos/IMG_2406.JPG" },
-    { name: "Edo", image: "/Krewly web photos/IMG_2397.JPG" },
-    { name: "Imo", image: "/Krewly web photos/IMG_2398.JPG" },
+    { name: "Lagos", slug: "lagos", image: "/Krewly web photos/IMG_2397.JPG" },
+    { name: "Abuja (FCT)", slug: "abuja", image: "/Krewly web photos/IMG_2398.JPG" },
+    { name: "Oyo", slug: "oyo", image: "/Krewly web photos/IMG_2399.JPG" },
+    { name: "Rivers", slug: "rivers", image: "/Krewly web photos/IMG_2400.JPG" },
+    { name: "Kano", slug: "kano", image: "/Krewly web photos/IMG_2401.JPG" },
+    { name: "Ogun", slug: "ogun", image: "/Krewly web photos/IMG_2402.JPG" },
+    { name: "Kaduna", slug: "kaduna", image: "/Krewly web photos/IMG_2403.JPG" },
+    { name: "Enugu", slug: "enugu", image: "/Krewly web photos/IMG_2404.JPG" },
+    { name: "Delta", slug: "delta", image: "/Krewly web photos/IMG_2405.JPG" },
+    { name: "Anambra", slug: "anambra", image: "/Krewly web photos/IMG_2406.JPG" },
+    { name: "Edo", slug: "edo", image: "/Krewly web photos/IMG_2397.JPG" },
+    { name: "Imo", slug: "imo", image: "/Krewly web photos/IMG_2398.JPG" },
     // Hidden initially - shown on "See more"
-    { name: "Akwa Ibom", image: "/Krewly web photos/IMG_2399.JPG" },
-    { name: "Cross River", image: "/Krewly web photos/IMG_2400.JPG" },
-    { name: "Osun", image: "/Krewly web photos/IMG_2401.JPG" },
-    { name: "Ekiti", image: "/Krewly web photos/IMG_2402.JPG" },
-    { name: "Kwara", image: "/Krewly web photos/IMG_2403.JPG" },
-    { name: "Ondo", image: "/Krewly web photos/IMG_2404.JPG" },
-    { name: "Abia", image: "/Krewly web photos/IMG_2405.JPG" },
-    { name: "Bayelsa", image: "/Krewly web photos/IMG_2406.JPG" },
-    { name: "Benue", image: "/placeholder.svg" },
-    { name: "Borno", image: "/placeholder.svg" },
-    { name: "Ebonyi", image: "/placeholder.svg" },
-    { name: "Gombe", image: "/placeholder.svg" },
-    { name: "Jigawa", image: "/placeholder.svg" },
-    { name: "Katsina", image: "/placeholder.svg" },
-    { name: "Kebbi", image: "/placeholder.svg" },
-    { name: "Kogi", image: "/placeholder.svg" },
-    { name: "Nasarawa", image: "/placeholder.svg" },
-    { name: "Niger", image: "/placeholder.svg" },
-    { name: "Plateau", image: "/placeholder.svg" },
-    { name: "Sokoto", image: "/placeholder.svg" },
-    { name: "Taraba", image: "/placeholder.svg" },
-    { name: "Yobe", image: "/placeholder.svg" },
-    { name: "Zamfara", image: "/placeholder.svg" },
-    { name: "Adamawa", image: "/placeholder.svg" },
-    { name: "Bauchi", image: "/placeholder.svg" },
+    { name: "Akwa Ibom", slug: "akwa-ibom", image: "/Krewly web photos/IMG_2399.JPG" },
+    { name: "Cross River", slug: "cross-river", image: "/Krewly web photos/IMG_2400.JPG" },
+    { name: "Osun", slug: "osun", image: "/Krewly web photos/IMG_2401.JPG" },
+    { name: "Ekiti", slug: "ekiti", image: "/Krewly web photos/IMG_2402.JPG" },
+    { name: "Kwara", slug: "kwara", image: "/Krewly web photos/IMG_2403.JPG" },
+    { name: "Ondo", slug: "ondo", image: "/Krewly web photos/IMG_2404.JPG" },
+    { name: "Abia", slug: "abia", image: "/Krewly web photos/IMG_2405.JPG" },
+    { name: "Bayelsa", slug: "bayelsa", image: "/Krewly web photos/IMG_2406.JPG" },
+    { name: "Benue", slug: "benue", image: "/placeholder.svg" },
+    { name: "Borno", slug: "borno", image: "/placeholder.svg" },
+    { name: "Ebonyi", slug: "ebonyi", image: "/placeholder.svg" },
+    { name: "Gombe", slug: "gombe", image: "/placeholder.svg" },
+    { name: "Jigawa", slug: "jigawa", image: "/placeholder.svg" },
+    { name: "Katsina", slug: "katsina", image: "/placeholder.svg" },
+    { name: "Kebbi", slug: "kebbi", image: "/placeholder.svg" },
+    { name: "Kogi", slug: "kogi", image: "/placeholder.svg" },
+    { name: "Nasarawa", slug: "nasarawa", image: "/placeholder.svg" },
+    { name: "Niger", slug: "niger", image: "/placeholder.svg" },
+    { name: "Plateau", slug: "plateau", image: "/placeholder.svg" },
+    { name: "Sokoto", slug: "sokoto", image: "/placeholder.svg" },
+    { name: "Taraba", slug: "taraba", image: "/placeholder.svg" },
+    { name: "Yobe", slug: "yobe", image: "/placeholder.svg" },
+    { name: "Zamfara", slug: "zamfara", image: "/placeholder.svg" },
+    { name: "Adamawa", slug: "adamawa", image: "/placeholder.svg" },
+    { name: "Bauchi", slug: "bauchi", image: "/placeholder.svg" },
   ]
 
-  const visibleStates = showAll ? states : states.slice(0, 12)
   const hiddenStates = states.slice(12)
 
   return (
@@ -58,8 +58,9 @@ export function LocationsSection() {
         {/* Initial visible states */}
         <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
           {states.slice(0, 12).map((state, i) => (
-            <div
+            <Link
               key={i}
+              href={`/location/${state.slug}`}
               className="flex flex-col overflow-hidden rounded-lg border border-gray-100 shadow-sm transition-transform hover:scale-[1.02] cursor-pointer"
             >
               <div className="aspect-[4/3] w-full bg-gray-100 overflow-hidden">
@@ -68,7 +69,7 @@ export function LocationsSection() {
               <div className="py-3 text-center bg-white">
                 <span className="text-xs md:text-sm font-bold text-gray-900">{state.name}</span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
@@ -78,8 +79,9 @@ export function LocationsSection() {
             }`}
         >
           {hiddenStates.map((state, i) => (
-            <div
+            <Link
               key={i + 12}
+              href={`/location/${state.slug}`}
               className="flex flex-col overflow-hidden rounded-lg border border-gray-100 shadow-sm transition-transform hover:scale-[1.02] cursor-pointer"
             >
               <div className="aspect-[4/3] w-full bg-gray-100 overflow-hidden">
@@ -88,7 +90,7 @@ export function LocationsSection() {
               <div className="py-3 text-center bg-white">
                 <span className="text-xs md:text-sm font-bold text-gray-900">{state.name}</span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
