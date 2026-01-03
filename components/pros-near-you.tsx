@@ -4,6 +4,7 @@ import { Star, ChevronRight } from "lucide-react"
 export function ProsNearYou() {
   const vendors = [
     {
+      id: "1",
       name: "Glam by Tolu",
       category: "Makeup Artist",
       loc: "Lekki, Lagos",
@@ -13,6 +14,7 @@ export function ProsNearYou() {
       image: "/Krewly web photos/IMG_2397.JPG",
     },
     {
+      id: "2",
       name: "Damola Photography",
       category: "Photographer",
       loc: "Ikeja, Lagos",
@@ -22,6 +24,7 @@ export function ProsNearYou() {
       image: "/Krewly web photos/IMG_2400.JPG",
     },
     {
+      id: "3",
       name: "Iya Gele",
       category: "Gele Stylist",
       loc: "Ibadan, Oyo",
@@ -31,6 +34,7 @@ export function ProsNearYou() {
       image: "/Krewly web photos/IMG_2398.JPG",
     },
     {
+      id: "4",
       name: "Adunni Decor",
       category: "Event Decorator",
       loc: "Victoria Island, Lagos",
@@ -53,9 +57,10 @@ export function ProsNearYou() {
 
         {/* Grid layout matching service-grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {vendors.map((vendor, i) => (
-            <div
-              key={i}
+          {vendors.map((vendor) => (
+            <Link
+              key={vendor.id}
+              href={`/vendors/${vendor.id}`}
               className="flex flex-col overflow-hidden rounded-lg border border-gray-100 shadow-sm transition-transform hover:scale-[1.02] cursor-pointer bg-white"
             >
               {/* Image */}
@@ -79,7 +84,7 @@ export function ProsNearYou() {
                   <span className="text-[10px] text-gray-400">({vendor.count})</span>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

@@ -1,30 +1,35 @@
+import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { MapPin } from "lucide-react"
 
 const vendors = [
   {
-    name: "Teni Beauty Studio",
+    id: "1",
+    name: "Glam by Tolu",
     category: "Makeup Artist",
     location: "Lekki, Lagos",
-    image: "/glam-makeup-portfolio.jpg",
+    image: "/Krewly web photos/IMG_2397.JPG",
   },
   {
+    id: "5",
     name: "Crown Braids & Styles",
     category: "Hair Stylist",
     location: "Ikeja, Lagos",
-    image: "/braids-hairstyle-portfolio.jpg",
+    image: "/Krewly web photos/IMG_2399.JPG",
   },
   {
-    name: "Perfect Gele Art",
-    category: "Gele Artist",
-    location: "Wuse, Abuja",
-    image: "/gele-masterpiece.jpg",
+    id: "3",
+    name: "Iya Gele",
+    category: "Gele Stylist",
+    location: "Ibadan, Oyo",
+    image: "/Krewly web photos/IMG_2398.JPG",
   },
   {
-    name: "Moments by Dave",
+    id: "2",
+    name: "Damola Photography",
     category: "Photographer",
-    location: "Victoria Island, Lagos",
-    image: "/wedding-photography-portrait.jpg",
+    location: "Ikeja, Lagos",
+    image: "/Krewly web photos/IMG_2400.JPG",
   },
 ]
 
@@ -34,14 +39,15 @@ export function FeaturedVendors() {
       <div className="container mx-auto px-4">
         <div className="mb-12 flex items-center justify-between">
           <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Top vendors</h2>
-          <a href="/browse" className="text-sm font-semibold text-primary hover:underline">
+          <Link href="/vendors" className="text-sm font-semibold text-primary hover:underline">
             View all
-          </a>
+          </Link>
         </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {vendors.map((vendor) => (
-            <div
-              key={vendor.name}
+            <Link
+              key={vendor.id}
+              href={`/vendors/${vendor.id}`}
               className="group overflow-hidden rounded-2xl border bg-background transition-all hover:shadow-xl"
             >
               <div className="aspect-square overflow-hidden">
@@ -61,7 +67,7 @@ export function FeaturedVendors() {
                   {vendor.location}
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

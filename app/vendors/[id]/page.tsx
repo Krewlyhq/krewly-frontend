@@ -144,6 +144,42 @@ const MOCK_VENDORS: Record<string, {
                 comment: "Great experience overall. The makeup was beautiful and she was very professional. Arrived on time and very friendly.",
                 service: "Editorial/Photoshoot"
             },
+            {
+                id: "r4",
+                author: "Ngozi E.",
+                avatar: "/Krewly web photos/IMG_2405.JPG",
+                rating: 5,
+                date: "2025-10-25",
+                comment: "I've used many makeup artists before but Tolu is on another level! The attention to detail is incredible. She took her time to understand my skin tone and preferences.",
+                service: "Bridal Package"
+            },
+            {
+                id: "r5",
+                author: "Fatima K.",
+                avatar: "/Krewly web photos/IMG_2406.JPG",
+                rating: 5,
+                date: "2025-10-12",
+                comment: "Absolutely stunning work! My mum couldn't believe how beautiful I looked. Definitely worth every kobo.",
+                service: "Party Glam"
+            },
+            {
+                id: "r6",
+                author: "Amaka U.",
+                avatar: "/Krewly web photos/IMG_2397.JPG",
+                rating: 4,
+                date: "2025-09-30",
+                comment: "Good work, arrived a bit late but made up for it with excellent service. The makeup lasted through my entire event.",
+                service: "Party Glam"
+            },
+            {
+                id: "r7",
+                author: "Kemi J.",
+                avatar: "/Krewly web photos/IMG_2398.JPG",
+                rating: 5,
+                date: "2025-09-15",
+                comment: "Tolu is a true artist! She did my makeup for a photoshoot and the results were magazine-worthy. Highly professional and talented.",
+                service: "Editorial/Photoshoot"
+            },
         ],
     },
     "2": {
@@ -688,52 +724,54 @@ export default function VendorDetailPage({ params }: PageParams) {
 
                     {/* Reviews Section */}
                     <section className="mb-8">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center gap-2">
-                                <Star className="h-5 w-5 text-amber-400 fill-amber-400" />
+                        <div className="flex items-center justify-between mb-6">
+                            <div className="flex items-center gap-3">
                                 <h2 className="text-xl font-bold">Reviews</h2>
-                                <span className="text-gray-500">({vendor.customerReviews.length})</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                                <span className="text-2xl font-bold">{vendor.rating.toFixed(1)}</span>
-                                <div className="flex">
-                                    {[1, 2, 3, 4, 5].map(star => (
-                                        <Star
-                                            key={star}
-                                            className={`h-4 w-4 ${star <= Math.round(vendor.rating) ? 'text-amber-400 fill-amber-400' : 'text-gray-200'}`}
-                                        />
-                                    ))}
+                                <div className="flex items-center gap-1 bg-amber-50 px-3 py-1 rounded-full">
+                                    <Star className="h-4 w-4 text-amber-500 fill-amber-500" />
+                                    <span className="font-bold text-amber-700">{vendor.rating.toFixed(1)}</span>
+                                    <span className="text-amber-600 text-sm">({vendor.customerReviews.length})</span>
                                 </div>
                             </div>
                         </div>
 
                         {vendor.customerReviews.length > 0 ? (
-                            <div className="space-y-4">
-                                {vendor.customerReviews.map((review) => (
-                                    <div key={review.id} className="bg-white rounded-xl border border-gray-200 p-5">
-                                        <div className="flex items-start gap-3 mb-3">
-                                            <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100">
-                                                <img src={review.avatar} alt={review.author} className="w-full h-full object-cover" />
+                            <div className="bg-white rounded-xl border border-gray-200 divide-y divide-gray-100">
+                                {vendor.customerReviews.map((review, index) => (
+                                    <div key={review.id} className="p-4 hover:bg-gray-50 transition-colors">
+                                        <div className="flex gap-3">
+                                            {/* Avatar */}
+                                            <div className="flex-shrink-0">
+                                                <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-200">
+                                                    <img src={review.avatar} alt={review.author} className="w-full h-full object-cover" />
+                                                </div>
                                             </div>
-                                            <div className="flex-1">
-                                                <div className="flex items-center justify-between">
-                                                    <h4 className="font-semibold text-gray-900">{review.author}</h4>
+
+                                            {/* Content */}
+                                            <div className="flex-1 min-w-0">
+                                                <div className="flex items-center gap-2 mb-1">
+                                                    <span className="font-semibold text-gray-900 text-sm">{review.author}</span>
+                                                    <span className="text-gray-300">•</span>
                                                     <span className="text-xs text-gray-400">{formatDate(review.date)}</span>
                                                 </div>
-                                                <div className="flex items-center gap-2">
+
+                                                <div className="flex items-center gap-2 mb-2">
                                                     <div className="flex">
                                                         {[1, 2, 3, 4, 5].map(star => (
                                                             <Star
                                                                 key={star}
-                                                                className={`h-3 w-3 ${star <= review.rating ? 'text-amber-400 fill-amber-400' : 'text-gray-200'}`}
+                                                                className={`h-3.5 w-3.5 ${star <= review.rating ? 'text-amber-400 fill-amber-400' : 'text-gray-200'}`}
                                                             />
                                                         ))}
                                                     </div>
-                                                    <span className="text-xs text-primary font-medium">{review.service}</span>
+                                                    <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">
+                                                        {review.service}
+                                                    </span>
                                                 </div>
+
+                                                <p className="text-gray-600 text-sm leading-relaxed">{review.comment}</p>
                                             </div>
                                         </div>
-                                        <p className="text-gray-600 text-sm leading-relaxed">{review.comment}</p>
                                     </div>
                                 ))}
                             </div>
