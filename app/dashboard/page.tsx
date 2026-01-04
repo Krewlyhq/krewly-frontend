@@ -5,13 +5,18 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { useAuth } from "@/lib/auth"
 import { Button } from "@/components/ui/button"
-import { LogOut, User, Settings, Mail, CheckCircle, Briefcase, Clock, FileText } from "lucide-react"
+import { LogOut, User, Settings, Mail, CheckCircle, Briefcase, Clock, FileText, Inbox } from "lucide-react"
 import { getApplication, saveApplication, type VendorApplication } from "@/lib/vendor"
+import { getNewInquiryCount } from "@/lib/inquiries"
 
 export default function DashboardPage() {
     const router = useRouter()
     const { user, isLoading, isAuthenticated, logout } = useAuth()
     const [application, setApplication] = useState<VendorApplication | null>(null)
+    const [newInquiryCount, setNewInquiryCount] = useState(0)
+
+    // Mock vendor ID (matches vendor detail page)
+    const vendorId = "1"
 
     useEffect(() => {
         if (!isLoading && !isAuthenticated) {
@@ -23,6 +28,10 @@ export default function DashboardPage() {
         if (app) {
             setApplication(app)
         }
+
+        // Get inquiry count for vendors
+        const count = getNewInquiryCount(vendorId)
+        setNewInquiryCount(count)
     }, [isLoading, isAuthenticated, router])
 
     const handleLogout = async () => {
@@ -165,6 +174,39 @@ export default function DashboardPage() {
                         </div>
                     )}
 
+                    {/* Vendor Inquiries Card */}
+                    {user.role === 'vendor' && (
+                        <div className="mb-8 bg-white rounded-2xl border border-gray-200 p-6">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                                        <Inbox className="h-6 w-6 text-primary" />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-bold text-lg">Inquiries</h3>
+                                        {newInquiryCount > 0 ? (
+                                            <p className="text-gray-600">
+                                                You have <span className="font-bold text-primary">{newInquiryCount} new</span> inquiry{newInquiryCount !== 1 ? 'ies' : ''}
+                                            </p>
+                                        ) : (
+                                            <p className="text-gray-500">No new inquiries</p>
+                                        )}
+                                    </div>
+                                </div>
+                                <Link href="/dashboard/inquiries">
+                                    <Button className="rounded-full">
+                                        View All
+                                        {newInquiryCount > 0 && (
+                                            <span className="ml-2 bg-white/20 px-2 py-0.5 rounded-full text-xs">
+                                                {newInquiryCount}
+                                            </span>
+                                        )}
+                                    </Button>
+                                </Link>
+                            </div>
+                        </div>
+                    )}
+
                     {/* Account Info Card */}
                     <div className="bg-white rounded-2xl border border-gray-200 p-6 mb-6">
                         <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
@@ -219,11 +261,24 @@ export default function DashboardPage() {
                                 Change Password
                             </Button>
                             {user.role === 'vendor' && (
-                                <Link href="/vendor/profile">
-                                    <Button className="rounded-full bg-primary text-white">
-                                        Manage Business Profile
-                                    </Button>
-                                </Link>
+                                <>
+                                    <Link href="/dashboard/inquiries">
+                                        <Button variant="outline" className="rounded-full relative">
+                                            <Inbox className="h-4 w-4 mr-2" />
+                                            Inquiries
+                                            {newInquiryCount > 0 && (
+                                                <span className="absolute -top-1 -right-1 bg-primary text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                                                    {newInquiryCount}
+                                                </span>
+                                            )}
+                                        </Button>
+                                    </Link>
+                                    <Link href="/vendor/profile">
+                                        <Button className="rounded-full bg-primary text-white">
+                                            Manage Business Profile
+                                        </Button>
+                                    </Link>
+                                </>
                             )}
                             {user.role === 'admin' && (
                                 <Link href="/admin">

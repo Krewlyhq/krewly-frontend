@@ -18,9 +18,11 @@ import {
     X,
     Package,
     Clock,
-    Check
+    Check,
+    Mail
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { InquiryModal } from "@/components/vendor/inquiry-modal"
 
 // Package type
 interface VendorPackage {
@@ -481,6 +483,7 @@ export default function VendorDetailPage({ params }: PageParams) {
     const [selectedImageIndex, setSelectedImageIndex] = useState(0)
     const [isLightboxOpen, setIsLightboxOpen] = useState(false)
     const [isSaved, setIsSaved] = useState(false)
+    const [isInquiryOpen, setIsInquiryOpen] = useState(false)
 
     if (!vendor) {
         return (
@@ -603,20 +606,28 @@ export default function VendorDetailPage({ params }: PageParams) {
                                         <span className="text-gray-400 text-sm">({vendor.reviews})</span>
                                     </div>
                                 </div>
-                                <div className="flex gap-3">
+                                <div className="grid grid-cols-3 gap-2">
                                     <Button
                                         onClick={handleWhatsApp}
-                                        className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold"
+                                        className="bg-green-600 hover:bg-green-700 text-white font-bold"
                                     >
-                                        <MessageCircle className="h-4 w-4 mr-2" />
-                                        WhatsApp
+                                        <MessageCircle className="h-4 w-4 mr-1" />
+                                        <span className="hidden sm:inline">WhatsApp</span>
                                     </Button>
-                                    <a href={`tel:${vendor.phone}`} className="flex-1">
+                                    <a href={`tel:${vendor.phone}`}>
                                         <Button variant="outline" className="w-full">
-                                            <Phone className="h-4 w-4 mr-2" />
-                                            Call
+                                            <Phone className="h-4 w-4 mr-1" />
+                                            <span className="hidden sm:inline">Call</span>
                                         </Button>
                                     </a>
+                                    <Button
+                                        onClick={() => setIsInquiryOpen(true)}
+                                        variant="outline"
+                                        className="border-primary text-primary hover:bg-primary/10"
+                                    >
+                                        <Mail className="h-4 w-4 mr-1" />
+                                        <span className="hidden sm:inline">Inquiry</span>
+                                    </Button>
                                 </div>
                             </div>
 
@@ -822,6 +833,14 @@ export default function VendorDetailPage({ params }: PageParams) {
                     </div>
                 </div>
             )}
+
+            {/* Inquiry Modal */}
+            <InquiryModal
+                isOpen={isInquiryOpen}
+                onClose={() => setIsInquiryOpen(false)}
+                vendorId={vendor.id}
+                vendorName={vendor.name}
+            />
         </div>
     )
 }
